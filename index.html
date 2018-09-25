@@ -1,0 +1,119 @@
+<!doctype <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Train Scheduler</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap stylesheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- My stylesheet -->
+    <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css" />
+</head>
+<body>
+    <header>
+            <img src="http://placehold.it/1920x500" class="img-fluid" alt="Responsive image">
+    </header>
+    <!-- Table information goes here -->
+    <div class="slider-contact-form">
+        <div class="container">
+							<div class="row">
+								<div class="col-lg-5">
+									<div class="featured-boxes mt-0 mb-0">
+										<div class="featured-box featured-box-primary mt-5">
+											<div class="box-content">
+												<h4 class="mb-0">Add train</h4>
+												<form id="trainEntry" method="POST">
+													<div class="form-row">
+														<div class="form-group col-lg-6">
+															<input type="text" value="" data-msg-required="Please enter train name" maxlength="100" class="form-control" name="name" id="trainName" placeholder="Train Name" required>
+														</div>
+														<div class="form-group col-lg-6">
+															<input type="text" value="" data-msg-required="Please enter your destination" maxlength="100" class="form-control" name="destination" id="destination" placeholder="Please enter a destination" required>
+														</div>
+													</div>
+													<div class="form-row">
+														<div class="form-group col-lg-6">
+															<input type="text" value="" data-msg-required="Please enter your train time." maxlength="100" class="form-control" name="train time" id="firstTraintime" placeholder="First train time (hh:mm)" required>
+														</div>
+														<div class="form-group col-lg-6">
+															<input type="text" value="" data-msg-required="Please enter frequency time" maxlength="100" class="form-control" name="frequency" id="frequency" placeholder="Frequency" required>
+														</div>
+													<div class="form-row">
+														<div class="form-group col-lg-4">
+															<input type="submit" value="Insert" class="btn btn-primary mb-5" data-loading-text="Loading...">
+														</div>
+														<div class="form-group col-lg-8">
+															<div class="alert alert-success d-none" id="contactSuccess">
+																Message has been sent to us.
+															</div>
+
+															<div class="alert alert-danger d-none" id="contactError">
+																Error sending your message.
+															</div>
+														</div>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+    <div class="container">
+            <div class="row">
+              <div class="col">
+              </div>
+              <div class="col-10">
+                    <table class="table table-hover">
+                            <thead>
+                              <tr>
+                                <th scope="col">Train Name</th>
+                                <th scope="col">Destination</th>
+                                <th scope="col">Frequency</th>
+                                <th scope="col">Next Arrival</th>
+                                <th scope="col">Minutes Away</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <th scope="row">Black</th>
+                                <td>Mark</td>
+                                <td>Mark</td>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">Amtrak</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>@fat</td>
+                                <td>Mark</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">North Pole</th>
+                                <td>Larry the Bird</td>
+                                <td>@twitter</td>
+                                <td>@twitter</td>
+                                <td>@twitter</td>
+                              </tr>
+                            </tbody>
+                          </table>
+              </div>
+              <div class="col">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- Firebase Script -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
+    <!-- Bootstrap script goes here -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>  
+    <!-- My Javascript code -->
+    <script src="./assets/javascript/logic.js"></script>  
+</body>
+</html>
