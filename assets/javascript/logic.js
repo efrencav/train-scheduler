@@ -35,9 +35,19 @@ $("#add-train").on("click", function(event) {
   trainScheduler.frequency = $("#frequency").val().trim();
   trainScheduler.minutes = $("#minutes-away-display").val().trim();
 
-  var newTrainRow = $("<td>");
+  var newTrainRow = $("<td id='name-display' scope='row'>");
+  var newDestinationRow = $("<td id='destination-display' scope='row'>");
+  var newTimeRow = $("<td id='train-time-display' scope='row'>");
+  var newFrequencyRow = $("<td id='frequency-display' scope='row'>");
+  var newMinutesAwayRow = $("<td id='minutes-away-display' scope='row'>");
+  
   // newTrainDetail;
-  newTrainRow.attr("id", `${trainScheduler.name}`);
+  // newTrainRow.attr("id", `${trainScheduler.name}`);
+  newTrainRow.prepend(`${trainScheduler.name}`);
+  newDestinationRow.prepend(`${trainScheduler.destination}`);
+  newTimeRow.prepend(`${trainScheduler.time}`);
+  newFrequencyRow.prepend(`${trainScheduler.frequency}`);
+  // newMinutesRow.prepend(`${trainScheduler.minutes}`);
 
   database.ref().set(trainScheduler);
 
