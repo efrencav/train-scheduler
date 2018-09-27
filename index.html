@@ -33,13 +33,10 @@
               <h3>Fill out the form and enter your train information</h3>
               <!-- Form fields -->
               <form>
-                <input class="form-control" type="text" name="trainTime" placeholder="New train time" id="train-time"
-                  required>
-                <input class="form-control" type="text" name="destination" placeholder="Destination" id="destination"
-                  required>
+                <input class="form-control" type="text" name="trainTime" placeholder="New Train Name" id="train-time" required>
+                <input class="form-control" type="text" name="destination" placeholder="Destination" id="destination" required>
                 <input class="form-control" type="text" name="time" placeholder="Time (hh:mm) military time" id="time" required>
-                <input class="form-control" type="text" name="frequency" placeholder="Frequency" id="frequency"
-                  required>
+                <input class="form-control" type="text" name="frequency" placeholder="Frequency" id="frequency" required>
                 <div class="form-button">
                   <button id="add-train" type="submit" class="ibtn">Submit</button>
                 </div>
@@ -57,18 +54,18 @@
                             <tr>
                                 <th scope="col"><strong>Train Name</strong></th>
                                 <th scope="col"><strong>Destination</strong></th>
+                                <th scope="col"><strong>Next Arrival</strong> (hh:mm) military time</th>
                                 <th scope="col"><strong>Frequency</strong></th>
-                                <th scope="col"><strong>Next Arrival</strong></th>
                                 <th scope="col"><strong>Minutes Away</strong></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tableRows">
                             <tr>
-                                <td id="name-display" scope="row">#</td>
-                                <td id="destination-display" scope="row">#</td>
-                                <td id="train-time-display" scope="row">#</td>
-                                <td id="frequency-display" scope="row">#</td>
-                                <td id="minutes-away-display" scope="row">#</td>
+                                <td id="name-display" scope="row"></td>
+                                <td id="destination-display" scope="row"></td>
+                                <td id="train-time-display" scope="row"></td>
+                                <td id="frequency-display" scope="row"></td>
+                                <td id="minutes-away-display" scope="row"></td>
                             </tr>
                         </tbody>
                     </table>
