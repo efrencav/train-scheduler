@@ -13,6 +13,9 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 var trainNumber = 0;
+var nextTrain = null;
+var firstTimeConverted =null;
+var tMinutesTillTrain = null;
 
 // On click event associated with the add train information
 // Capture Button Click
@@ -26,88 +29,100 @@ $("#add-train").on("click", function (event) {
         time: '',
         frequency: '',
         minutes: '',
+        nextTrain,
+        
         dateAdded: firebase.database.ServerValue.TIMESTAMP
     };
-
-    trainNumber++;
+    var firstTimeConverted = null;
+    var minutesUntilTrain = null;
 
     // Capture User Inputs and store them into variables
-    trainScheduler.name = $("#train-time").val().trim();
-    trainScheduler.destination = $("#destination").val().trim();
-    trainScheduler.time = $("#time").val().trim();
-    trainScheduler.frequency = $("#frequency").val().trim();
-    // trainScheduler.minutes = $("#minutes-away-display").val().trim();
+    trainScheduler.name = $("#train-name").val().trim();
+    trainScheduler.destination = $("#destination-display").val().trim();
+    trainScheduler.time = $("#train-time-display").val().trim();
+    trainScheduler.frequency = $("#frequency-display").val().trim();
 
-    var newRow = $("<tr>");
+    console.log("Train Name: " + trainScheduler.name);
+    console.log("Destination: " + trainScheduler.destination);
+    console.log("Time: " + trainScheduler.time);
+    console.log("Frequency: " + trainScheduler.frequency);
 
-    var newTrainRow = $("<td class='name-display'>" + trainNumber).text(trainScheduler.name);
-    var newDestinationRow = $("<td class='destination-display'>" + trainNumber).text(trainScheduler.destination);
-    var newTimeRow = $("<td class='train-time-display'>" + trainNumber).text(trainScheduler.time);
-    var newFrequencyRow = $("<td class='frequency-display'>" + trainNumber).text(trainScheduler.frequency);
-    // var newMinutesAwayRow = $("<td class='minutes-away-display'>").text(trainScheduler.minutes);
-
-    newRow.append(newTrainRow, newDestinationRow, newTimeRow, newFrequencyRow);
-
-    $("tbody").append(newRow);
-
-
-    // newTrainDetail;
-    // newTrainRow.attr("id", `${trainScheduler.name}`);
-    // newTrainRow.append(newTrainRow.text(trainscheduler.name));
-    // newDestinationRow.append(`${trainScheduler.destination}`);
-    // newTimeRow.append(`${trainScheduler.time}`);
-    // newFrequencyRow.append(`${trainScheduler.frequency}`);
-    // newMinutesAwayRow.append(`${trainScheduler.minutes}`);
+    var newTrainInfo = {
+        trainName: trainScheduler.name,
+        destination: trainScheduler.destination,
+        time: trainScheduler.time,
+        frequency: trainScheduler.frequency
+    };
 
     database.ref().push(trainScheduler);
 
+    clearForm();
+
 });
+
+function clearForm() {
+    document.getElementById("trainForm").reset();
+};
 
 // Firebase is always watching for changes to the data.
 // When changes occurs it will print them to console and html
 database.ref().on("value", function (snapshot) {
-
     // Print the initial data to the console.
     console.log(snapshot.val());
 
-    // Log the value of the various properties
-    console.log(snapshot.val().name);
-    console.log(snapshot.val().destination);
-    console.log(snapshot.val().time);
-    console.log(snapshot.val().frequency);
-    console.log(snapshot.val().minutes);
+    // Store everything into a variable
+    trainName = snapshot.val().trainName;
+    destination = snapshot.val().destination;
+    time = snapshot.val().time;
+    frequency = snapshot.val().frequency;
 
-    // Change the HTML
-    $("#name-display").text(snapshot.val().name);
-    $("#destination-display").text(snapshot.val().destination);
-    $("#train-time-display").text(snapshot.val().time);
-    $("#frequency-display").text(snapshot.val().frequency);
-    $("#minutes-away-display").text(snapshot.val().minutes);
-}, function (errorObject) {
-    console.log("The read failed: " + errorObject.code);
+    // Employee information
+    console.log(trainName);
+    console.log(destination);
+    console.log(time);
+    console.log(frequency);
+
+    // First time pushed back a year to make sure it comes before current time
+    firstTimeConverted = moment(time, "HH:mm").subtract(1, "years");
+    console.log(firstTimeConverted);
+
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % frequency;
+    console.log(tRemainder);
+
+    // Minute Until Train
+    var tMinutesTillTrain = frequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
+    // Create new rows
+    var newRow = $("<tr>").append (
+        $("<td>").text(trainName),
+        $("<td>").text(destination),
+        $("<td>").text(time),
+        $("<td>").text(frequency),
+        $("<td>").text(trainName),
+    );
+
+    // Append a new role to the table
+    $("#mainSchedule > tbody").append(newRow);
 });
 
-database.ref().on("child_added", function (snapshot, prevChildKey) {
+    function displayTime () {
+        var currentTime = moment().format("MMM Do YYYY, h:mm:ss a");
+        $("#currentTime").text(currentTime);
+    }
 
-    var newPost = snapshot.val();
-    // Print the initial data to the console.
-    console.log(snapshot.val());
-
-    // Log the value of the various properties
-    console.log(snapshot.val().name);
-    console.log(snapshot.val().destination);
-    console.log(snapshot.val().time);
-    console.log(snapshot.val().frequency);
-    console.log(snapshot.val().minutes);
-
-    // Change the HTML
-    $(".name-display" + trainNumber).text(newPost.name);
-    $(".destination-display" + trainNumber).text(newPost.destination);
-    $(".train-time-display"+ trainNumber).text(newPost.time);
-    $(".frequency-display" + trainNumber).text(newPost.frequency);
-    // var newMins= $("#minutes-away-display").text(newPost.minutes);
-
-    // $("#tableRows").append(newRow);
-}, function (errorObject) {
-    console.log("The read failed: " + errorObject.code);
-});
+    setInterval(displayTime, 1000);
+    
