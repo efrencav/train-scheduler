@@ -36,38 +36,17 @@ $("#add-train").on("click", function (event) {
     trainScheduler.destination = $("#destination").val().trim();
     trainScheduler.time = $("#time").val().trim();
     trainScheduler.frequency = $("#frequency").val().trim();
-    trainScheduler.minutes = $("#minutes-away-display").val().trim();
+    // trainScheduler.minutes = $("#minutes-away-display").val().trim();
     
-
-    
-
     database.ref().push(trainScheduler);
+    clearForm()
 
 });
 
-// Firebase is always watching for changes to the data.
-// When changes occurs it will print them to console and html
-// database.ref().on("value", function (snapshot) {
+function clearForm() {
+    document.getElementById("trainForm").reset();
+};
 
-//     // Print the initial data to the console.
-//     console.log(snapshot.val());
-
-//     // Log the value of the various properties
-//     // console.log(snapshot.val().name);
-//     // console.log(snapshot.val().destination);
-//     // console.log(snapshot.val().time);
-//     // console.log(snapshot.val().frequency);
-//     // console.log(snapshot.val().minutes);
-
-//     // Change the HTML
-//     $("#name-display").text(snapshot.val().name);
-//     $("#destination-display").text(snapshot.val().destination);
-//     $("#train-time-display").text(snapshot.val().time);
-//     $("#frequency-display").text(snapshot.val().frequency);
-//     $("#minutes-away-display").text(snapshot.val().minutes);
-// }, function (errorObject) {
-//     console.log("The read failed: " + errorObject.code);
-// });
 
 database.ref().on("child_added", function (childSnapshot, prevChildKey) {
 
@@ -75,31 +54,49 @@ database.ref().on("child_added", function (childSnapshot, prevChildKey) {
     // Print the initial data to the console.
     console.log(newPost.name);
     trainNumber++;
-    // Log the value of the various properties
-    // console.log(snapshot.val().name);
-    // console.log(snapshot.val().destination);
-    // console.log(snapshot.val().time);
-    // console.log(snapshot.val().frequency);
-    // console.log(snapshot.val().minutes);
-    var newRow = $("<tr>").attr('data-num', trainNumber);
 
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    firstTimeConverted = moment(newPost.time, "MMMM Do YYYY, H HH").subtract(1, "years");
+    console.log(firstTimeConverted);
+
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("LTS"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % newPost.frequency;
+    console.log(tRemainder);
+
+    // Minute Until Train
+    tMinutesTillTrain = newPost.frequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+    nextTrain = moment().add(tMinutesTillTrain, "minutes").format('LTS');
+    // console.log("ARRIVAL TIME: " + moment(nextTrain));
+    
+    var newRow = $("<tr>").attr('data-num', trainNumber);
     var newTrainRow = $("<td class='name-display'>").text(newPost.name);
     var newDestinationRow = $("<td class='destination-display'>").text(newPost.destination);
-    var newTimeRow = $("<td class='train-time-display'>").text(newPost.time);
     var newFrequencyRow = $("<td class='frequency-display'>").text(newPost.frequency);
-    // var newMinutesAwayRow = $("<td class='minutes-away-display'>").text(trainScheduler.minutes);
+    var newTimeRow = $("<td class='train-time-display'>").text(newPost.time);
+    var newMinutesAwayRow = $("<td class='minutes-away-display'>").text(tMinutesTillTrain);
 
-    newRow.append(newTrainRow, newDestinationRow, newTimeRow, newFrequencyRow);
+    newRow.append(newTrainRow, newDestinationRow, newFrequencyRow, newTimeRow, newMinutesAwayRow);
 
     $("tbody").append(newRow);
-    // Change the HTML
-    // $("#name-display" + trainNumber).text(newPost.name);
-    // $("#destination-display" + trainNumber).text(newPost.destination);
-    // $("#train-time-display" + trainNumber).text(newPost.time);
-    // $("#frequency-display" + trainNumber).text(newPost.frequency);
-    // var newMins= $("#minutes-away-display").text(newPost.minutes);
+    
 
-    // $("#tableRows").append(newRow);
 }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
-});
+    });
+function displayTime () {
+    var currentTime = moment().format('MMM Do YYYY, h:mm:ss a');
+    $("#currentTime").text(currentTime);
+
+    }
+    setInterval(displayTime, 1000);
